@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Button,
   Container,
@@ -21,7 +21,11 @@ import {
   scheduler,
   stop,
   resetCounters,
+  updatePadMap,
+  updateTempo,
 } from '../utils/scheduler';
+
+import Pads from '../components/Pads';
 
 import audioCtx from '../utils/audioContext';
 
@@ -34,6 +38,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 function Home() {
+
+  const requestRef = useRef<number>(0);
+
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [samplesValue, setSamplesValue] = useState<AudioBuffer[] | null>(null);
@@ -83,11 +90,16 @@ function Home() {
 
   const handleTempoChange = (event: any, newValue: number | number[]) => {
     setTempoValue(newValue as number);
+    updateTempo(newValue as number);
   };
 
   const handlePlayClick = () => {
     setIsPlaying(!isPlaying);
   };
+
+  const padMapOnChange = (mapping: any[]) => {
+    updatePadMap(mapping);
+  }
 
   /**
    * Run on page load
@@ -112,6 +124,7 @@ function Home() {
       stop();
     }
   }, [isPlaying]);
+
 
   return (
     <Container component="main" className={classes.main} maxWidth="lg">
@@ -241,6 +254,7 @@ function Home() {
                 valueLabelDisplay="auto"
               />
             </Grid>
+            <Pads padMapOnChange={padMapOnChange}></Pads>
           </div>
         )}
     </Container>

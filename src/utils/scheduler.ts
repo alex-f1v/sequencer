@@ -7,6 +7,8 @@ let scheduleAheadTime = 0.1;
 let currentNote = 0;
 let nextNoteTime = 0.0; // when the next note is due.
 
+let padMap: any = [];
+
 let tempo = 60;
 
 export const nextNote = () => {
@@ -21,25 +23,25 @@ export const nextNote = () => {
 }
 
 
-const notesInQueue = [];
+export const notesInQueue: any = [];
 
 function scheduleNote(beatNumber: number, time: number) {
   // console.log(new Date().getTime() / 1000);
   // push the note on the queue, even if we're not playing.
   notesInQueue.push({ note: beatNumber, time: time });
-
-  // if (pads[0].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-  // playSweep();
-  // }
-  // if (pads[1].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-  // playPulse()
-  // }
-  // if (pads[2].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-  // playNoise()
-  // }
-  // if (pads[3].querySelectorAll('button')[currentNote].getAttribute('aria-checked') === 'true') {
-  playSample();
-  // }
+  console.log(padMap, currentNote);
+  if (padMap.includes(`sweep-pad-${currentNote}`)) {
+    playSweep();
+  }
+  if (padMap.includes(`pulse-pad-${currentNote}`)) {
+    playPulse();
+  }
+  if (padMap.includes(`noise-pad-${currentNote}`)) {
+    playNoise();
+  }
+  if (padMap.includes(`sample-pad-${currentNote}`)) {
+    playSample();
+  }
 }
 
 let timerID: number | undefined;
@@ -59,27 +61,6 @@ export const resetCounters = () => {
 
 export const stop = () => window.clearTimeout(timerID);
 
+export const updatePadMap = (map: any) => padMap = map;
 
-// let lastNoteDrawn = 3;
-
-// function draw() {
-//     let drawNote = lastNoteDrawn;
-//     let currentTime = audioCtx.currentTime;
-
-//     while (notesInQueue.length && notesInQueue[0].time < currentTime) {
-//         drawNote = notesInQueue[0].note;
-//         notesInQueue.splice(0,1);   // remove note from queue
-//     }
-
-//     // We only need to draw if the note has moved.
-//     if (lastNoteDrawn != drawNote) {
-//         pads.forEach(function(el, i) {
-//             el.children[lastNoteDrawn].style.borderColor = 'hsla(0, 0%, 10%, 1)';
-//             el.children[drawNote].style.borderColor = 'hsla(49, 99%, 50%, 1)';
-//         });
-
-//         lastNoteDrawn = drawNote;
-//     }
-//     // set up to draw again
-//     requestAnimationFrame(draw);
-// }
+export const updateTempo = (bpm: number) => tempo = bpm;
