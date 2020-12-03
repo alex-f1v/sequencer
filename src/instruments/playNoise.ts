@@ -1,6 +1,6 @@
 import audioCtx from '../utils/audioContext';
 
-let noiseDuration: number = 0;
+let noiseDuration: number = 0.1;
 let bandPassHz: number = 0;
 export const playNoise = () => {
   const bufferSize = audioCtx.sampleRate * noiseDuration; // set the time of the note

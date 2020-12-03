@@ -23,6 +23,7 @@ import {
   resetCounters,
   updatePadMap,
   updateTempo,
+  notesInQueue,
 } from '../utils/scheduler';
 
 import Pads from '../components/Pads';
@@ -57,6 +58,8 @@ function Home() {
   const [tempoValue, setTempoValue] = useState<number>(60);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+
+  const [beat, setBeat] = useState<number | undefined>(undefined);
 
   const handleAttackChange = (event: any, newValue: number | number[]) => {
     setAttackValue(newValue as number);
@@ -101,6 +104,24 @@ function Home() {
     updatePadMap(mapping);
   }
 
+  let lastNoteDrawn = 3;
+  const beatProgressAnimation = () => {
+    let drawNote = lastNoteDrawn;
+    // console.log('beatProgressAnimation', drawNote);
+    const currentTime = audioCtx.currentTime;
+    while (notesInQueue.length && notesInQueue[0].time < currentTime) {
+      drawNote = notesInQueue[0].note;
+      notesInQueue.splice(0, 1);   // remove note from queue
+      setBeat(drawNote);
+    }
+    // We only need to draw if the note has moved.
+    if (lastNoteDrawn !== drawNote) {
+      lastNoteDrawn = drawNote;
+    }
+    // set up to draw again
+    requestRef.current = requestAnimationFrame(beatProgressAnimation);
+  }
+
   /**
    * Run on page load
    */
@@ -120,8 +141,11 @@ function Home() {
       resetCounters();
       audioCtx.state === 'suspended' && audioCtx.resume();
       scheduler();
+      requestAnimationFrame(beatProgressAnimation);
     } else {
       stop();
+      cancelAnimationFrame(requestRef.current);
+      setBeat(undefined);
     }
   }, [isPlaying]);
 
@@ -217,7 +241,7 @@ function Home() {
                 aria-labelledby="discrete-slider-small-steps"
                 step={0.1}
                 marks
-                min={0}
+                min={0.1}
                 max={2}
                 value={noiseDurationValue}
                 valueLabelDisplay="auto"
@@ -254,7 +278,7 @@ function Home() {
                 valueLabelDisplay="auto"
               />
             </Grid>
-            <Pads padMapOnChange={padMapOnChange}></Pads>
+            <Pads currentBeat={beat} padMapOnChange={padMapOnChange}></Pads>
           </div>
         )}
     </Container>

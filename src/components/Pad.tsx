@@ -11,6 +11,7 @@ import classNames from 'classnames';
 type Props = {
   onCheckPad?: any;
   id: string;
+  currentBeat?: number;
 }
 
 const ColorButton = withStyles((theme: Theme) => ({
@@ -26,6 +27,12 @@ const useStyles = makeStyles((theme: Theme) =>
     margin: {
       margin: theme.spacing(1),
     },
+    white: {
+      backgroundColor: '#FFF',
+      '&:hover': {
+        backgroundColor: '#FFF',
+      },
+    },
     yellow: {
       borderColor: '#000',
       backgroundColor: '#FFCF01',
@@ -33,12 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: '#FFCF01',
       },
     },
-    white: {
-      backgroundColor: '#FFF',
-      '&:hover': {
-        backgroundColor: '#FFF',
-      },
-    }
   }),
 );
 
@@ -46,14 +47,22 @@ const Pad = (props: Props) => {
   const [checked, setChecked] = useState<boolean>(false);
   const classes = useStyles();
 
+  const isCurrentBeatPad = () => props.id.includes(`${props.currentBeat}`);
+
   const handleCheck = () => {
     setChecked(!checked);
-    props.onCheckPad(props.id, checked);
+    props.onCheckPad(props.id);
   };
+
+  const classList = classNames(
+    classes.margin,
+    checked ? classes.yellow : classes.white,
+    isCurrentBeatPad() && classes.yellow
+  )
 
   return (
     <ColorButton
-      className={classNames(classes.margin, checked ? classes.yellow : classes.white)}
+      className={classNames(classList)}
       // @ts-ignore
       onClick={handleCheck} />
   );

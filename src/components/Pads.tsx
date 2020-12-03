@@ -4,12 +4,13 @@ import Pad from './Pad';
 
 type Props = {
   padMapOnChange?: any;
+  currentBeat?: number;
 }
 
 const Pads = (props: Props) => {
   const [padMap, setPadMap] = useState<any>([]);
 
-  const onCheckPad = (id: string, checked: boolean) => {
+  const onCheckPad = (id: string) => {
     const newState = padMap.includes(id) ?
       padMap.filter((pad: any) => pad !== id)
       : [...padMap, id];
@@ -22,28 +23,28 @@ const Pads = (props: Props) => {
   return (
     <Container>
       <Grid item xs={6}>
-        <Pad id="sweep-pad-0" onCheckPad={onCheckPad} />
-        <Pad id="sweep-pad-1" onCheckPad={onCheckPad} />
-        <Pad id="sweep-pad-2" onCheckPad={onCheckPad} />
-        <Pad id="sweep-pad-3" onCheckPad={onCheckPad} />
+        <Pad id="sweep-pad-0" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="sweep-pad-1" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="sweep-pad-2" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="sweep-pad-3" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
       </Grid>
       <Grid item xs={6}>
-        <Pad id="pulse-pad-0" onCheckPad={onCheckPad} />
-        <Pad id="pulse-pad-1" onCheckPad={onCheckPad} />
-        <Pad id="pulse-pad-2" onCheckPad={onCheckPad} />
-        <Pad id="pulse-pad-3" onCheckPad={onCheckPad} />
+        <Pad id="pulse-pad-0" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="pulse-pad-1" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="pulse-pad-2" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="pulse-pad-3" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
       </Grid>
       <Grid item xs={6}>
-        <Pad id="noise-pad-0" onCheckPad={onCheckPad} />
-        <Pad id="noise-pad-1" onCheckPad={onCheckPad} />
-        <Pad id="noise-pad-2" onCheckPad={onCheckPad} />
-        <Pad id="noise-pad-3" onCheckPad={onCheckPad} />
+        <Pad id="noise-pad-0" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="noise-pad-1" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="noise-pad-2" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="noise-pad-3" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
       </Grid>
       <Grid item xs={6}>
-        <Pad id="sample-pad-0" onCheckPad={onCheckPad} />
-        <Pad id="sample-pad-1" onCheckPad={onCheckPad} />
-        <Pad id="sample-pad-2" onCheckPad={onCheckPad} />
-        <Pad id="sample-pad-3" onCheckPad={onCheckPad} />
+        <Pad id="sample-pad-0" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="sample-pad-1" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="sample-pad-2" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
+        <Pad id="sample-pad-3" onCheckPad={onCheckPad} currentBeat={props.currentBeat}/>
       </Grid>
     </Container>
   );

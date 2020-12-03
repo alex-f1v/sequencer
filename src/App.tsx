@@ -11,12 +11,6 @@ function App() {
   return (
     <Router>
       <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-        </ul>
-        <hr />
         <Switch>
           <Route path="/" component={Home} />
         </Switch>

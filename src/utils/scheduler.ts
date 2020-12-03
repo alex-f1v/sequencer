@@ -1,15 +1,16 @@
 import audioCtx from './audioContext';
 import { playNoise, playPulse, playSweep, playSample } from '../instruments';
 
-let lookahead = 8.0;
-let scheduleAheadTime = 0.1;
+// USER UPDATE VALUES
+let padMap: any = [];
+let tempo = 60;
 
+// RESET WHEN STARTING
 let currentNote = 0;
 let nextNoteTime = 0.0; // when the next note is due.
 
-let padMap: any = [];
-
-let tempo = 60;
+let lookahead = 8.0;
+let scheduleAheadTime = 0.1;
 
 export const nextNote = () => {
   const secondsPerBeat = 60.0 / tempo;
@@ -29,7 +30,6 @@ function scheduleNote(beatNumber: number, time: number) {
   // console.log(new Date().getTime() / 1000);
   // push the note on the queue, even if we're not playing.
   notesInQueue.push({ note: beatNumber, time: time });
-  console.log(padMap, currentNote);
   if (padMap.includes(`sweep-pad-${currentNote}`)) {
     playSweep();
   }
@@ -54,6 +54,7 @@ export const scheduler = () => {
   timerID = window.setTimeout(scheduler, lookahead);
 }
 
+// UPDATE VALUES
 export const resetCounters = () => {
   currentNote = 0;
   nextNoteTime = audioCtx.currentTime;
