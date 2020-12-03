@@ -1,5 +1,5 @@
 import audioCtx from './audioContext';
-import { playNoise, playPulse, playSweep, playSample } from '../instruments';
+import { playNoise, playPulse, playSweep, playKickSample, playSnareSample } from '../instruments';
 
 // USER UPDATE VALUES
 let padMap: any = [];
@@ -39,8 +39,11 @@ function scheduleNote(beatNumber: number, time: number) {
   if (padMap.includes(`noise-pad-${currentNote}`)) {
     playNoise();
   }
-  if (padMap.includes(`sample-pad-${currentNote}`)) {
-    playSample();
+  if (padMap.includes(`sample-pad-kick-${currentNote}`)) {
+    playKickSample();
+  }
+  if (padMap.includes(`sample-pad-snare-${currentNote}`)) {
+    playSnareSample();
   }
 }
 

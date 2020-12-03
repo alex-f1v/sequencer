@@ -14,7 +14,7 @@ import {
   updateNoiseParameters,
   updatePulseParameters,
   updateSweepParameters,
-  selectSample,
+  setSamples,
 } from '../instruments';
 import loadSamples from '../utils/loadSamples';
 import {
@@ -44,52 +44,12 @@ function Home() {
 
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [samplesValue, setSamplesValue] = useState<AudioBuffer[] | null>(null);
-
-  const [attackValue, setAttackValue] = useState<number>(0.2);
-  const [releaseValue, setReleaseValue] = useState<number>(0.5);
-
-  const [pulseHzValue, setPulseHzValue] = useState<number>(880);
-  const [lfoHzValue, setLfoHzValue] = useState<number>(30);
-
-  const [noiseDurationValue, setNoiseDurationValue] = useState<number>(1);
-  const [bandPassHzValue, setBandPassHzValue] = useState<number>(1000);
 
   const [tempoValue, setTempoValue] = useState<number>(60);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const [beat, setBeat] = useState<number | undefined>(undefined);
-
-  const handleAttackChange = (event: any, newValue: number | number[]) => {
-    setAttackValue(newValue as number);
-    updateSweepParameters(newValue as number, releaseValue);
-  };
-
-  const handleReleaseChange = (event: any, newValue: number | number[]) => {
-    setReleaseValue(newValue as number);
-    updateSweepParameters(attackValue, newValue as number);
-  };
-
-  const handlePulseHzChange = (event: any, newValue: number | number[]) => {
-    setPulseHzValue(newValue as number);
-    updatePulseParameters(newValue as number, lfoHzValue);
-  };
-
-  const handleLFOHzChange = (event: any, newValue: number | number[]) => {
-    setLfoHzValue(newValue as number);
-    updatePulseParameters(pulseHzValue, newValue as number);
-  };
-
-  const handleNoiseDurationChange = (event: any, newValue: number | number[]) => {
-    setNoiseDurationValue(newValue as number);
-    updateNoiseParameters(newValue as number, bandPassHzValue);
-  };
-
-  const handleBandPassHzChange = (event: any, newValue: number | number[]) => {
-    setBandPassHzValue(newValue as number);
-    updateNoiseParameters(noiseDurationValue, newValue as number);
-  };
 
   const handleTempoChange = (event: any, newValue: number | number[]) => {
     setTempoValue(newValue as number);
@@ -127,13 +87,12 @@ function Home() {
    */
   useEffect(() => {
     loadSamples().then((allSamples) => {
-      setSamplesValue(allSamples);
+      setSamples(allSamples);
       setIsLoading(false);
-      selectSample(allSamples[0]);
     });
-    updateSweepParameters(attackValue, releaseValue);
-    updatePulseParameters(pulseHzValue, lfoHzValue);
-    updateNoiseParameters(noiseDurationValue, bandPassHzValue);
+    updateSweepParameters(0.2, 0.5);
+    updatePulseParameters(880, 30);
+    updateNoiseParameters(1, 1000);
   }, []);
 
   useEffect(() => {
@@ -173,96 +132,6 @@ function Home() {
                   'Play'
                 )}
             </Button>
-            <Typography id="continuous-slider" gutterBottom>
-              Attack Time
-            </Typography>
-            <Grid item xs={6}>
-              <Slider
-                aria-labelledby="discrete-slider-small-steps"
-                step={0.1}
-                marks
-                min={0}
-                max={1}
-                value={attackValue}
-                valueLabelDisplay="auto"
-                onChange={handleAttackChange}
-              />
-            </Grid>
-            <Typography id="continuous-slider" gutterBottom>
-              Release Time
-            </Typography>
-            <Grid item xs={6}>
-              <Slider
-                aria-labelledby="discrete-slider-small-steps"
-                step={0.1}
-                marks
-                min={0}
-                max={1}
-                value={releaseValue}
-                onChange={handleReleaseChange}
-                valueLabelDisplay="auto"
-              />
-            </Grid>
-            <Typography id="continuous-slider" gutterBottom>
-              Pulse Hz
-            </Typography>
-            <Grid item xs={6}>
-              <Slider
-                aria-labelledby="discrete-slider-small-steps"
-                step={1}
-                marks
-                min={660}
-                max={1320}
-                value={pulseHzValue}
-                valueLabelDisplay="auto"
-                onChange={handlePulseHzChange}
-              />
-            </Grid>
-            <Typography id="continuous-slider" gutterBottom>
-              LFO Hz
-            </Typography>
-            <Grid item xs={6}>
-              <Slider
-                aria-labelledby="discrete-slider-small-steps"
-                step={1}
-                marks
-                min={20}
-                max={40}
-                value={lfoHzValue}
-                onChange={handleLFOHzChange}
-                valueLabelDisplay="auto"
-              />
-            </Grid>
-            <Typography id="continuous-slider" gutterBottom>
-              Noise Duration
-            </Typography>
-            <Grid item xs={6}>
-              <Slider
-                aria-labelledby="discrete-slider-small-steps"
-                step={0.1}
-                marks
-                min={0.1}
-                max={2}
-                value={noiseDurationValue}
-                valueLabelDisplay="auto"
-                onChange={handleNoiseDurationChange}
-              />
-            </Grid>
-            <Typography id="continuous-slider" gutterBottom>
-              BandPass Hz
-            </Typography>
-            <Grid item xs={6}>
-              <Slider
-                aria-labelledby="discrete-slider-small-steps"
-                step={5}
-                marks
-                min={400}
-                max={1200}
-                value={bandPassHzValue}
-                onChange={handleBandPassHzChange}
-                valueLabelDisplay="auto"
-              />
-            </Grid>
             <Typography id="continuous-slider" gutterBottom>
               Tempo
             </Typography>
